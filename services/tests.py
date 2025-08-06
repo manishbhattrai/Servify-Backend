@@ -13,7 +13,7 @@ User = get_user_model()
 
 
 
-'''class ProviderServiceTest(APITestCase):
+class ProviderServiceTest(APITestCase):
 
 
     def setUp(self):
@@ -168,7 +168,7 @@ User = get_user_model()
 
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)'''
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class BaseServiceTest(APITestCase):
 
@@ -193,6 +193,12 @@ class BaseServiceTest(APITestCase):
 
             name = 'plumber',
             description = 'this is a plumber'
+        )
+
+        self.base_service_2 = BaseService.objects.create(
+
+            name = 'driver',
+            description = 'this is a driver'
         )
 
         self.client = APIClient()
@@ -236,4 +242,40 @@ class BaseServiceTest(APITestCase):
 
         response = self.client.post(url,data, format='json')
         
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_only_admin_can_get_services(self):
+
+        self.authenticate(self.user)
+
+        url = reverse('base-services-list')
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_only_admin_can_update_services(self):
+
+        self.authenticate(self.user)
+
+        url = reverse('base-services-detail', args=[self.base_service.id])
+
+        data = {
+
+            "name":"driver",
+            
+        }
+
+        response = self.client.patch(url,data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_only_admin_can_delete_services(self):
+
+        self.authenticate(self.user)
+
+        url = reverse('base-services-detail',args=[self.base_service_2.id])
+
+        response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
