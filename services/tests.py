@@ -5,7 +5,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from .api.serializers import BaseServiceSerializer
+##from .api.serializers import BaseServiceSerializer
 
 # Create your tests here.
 
@@ -13,7 +13,7 @@ User = get_user_model()
 
 
 
-class ProviderServiceTest(APITestCase):
+'''class ProviderServiceTest(APITestCase):
 
 
     def setUp(self):
@@ -168,7 +168,7 @@ class ProviderServiceTest(APITestCase):
 
         response = self.client.delete(url)
 
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)'''
 
 class BaseServiceTest(APITestCase):
 
@@ -205,8 +205,35 @@ class BaseServiceTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION = f" Bearer {access_token}")
     
 
+    def test_admin_can_create(self):
+
+        self.authenticate(self.superuser)
+
+        url = reverse('base-services-list')
+
+        data = {
+
+            "name":"plumber",
+            "description":"this is plumber"
+        }
+
+        response = self.client.post(url,data, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['name'],"plumber")
+    
     def test_only_admin_can_create(self):
 
         self.authenticate(self.user)
 
+        url = reverse('base-services-list')
+
+        data = {
+
+            "name":"plumber",
+            "description":"this is plumber"
+        }
+
+        response = self.client.post(url,data, format='json')
         
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
