@@ -1,0 +1,948 @@
+openapi: 3.0.3
+info:
+  title: Servify API
+  version: 1.0.0
+  description: Servify is a service provider hiring platform and this is servify endpoints.
+paths:
+  /api/services/{provider_id}/service-list/:
+    get:
+      operationId: api_services_service_list_list
+      parameters:
+      - in: path
+        name: provider_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Provider Service for customers
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderService'
+          description: ''
+  /api/services/base-services/:
+    get:
+      operationId: api_services_base_services_list
+      tags:
+      - Base Service
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BaseService'
+          description: ''
+    post:
+      operationId: api_services_base_services_create
+      tags:
+      - Base Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BaseService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BaseService'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseService'
+          description: ''
+  /api/services/base-services/{id}/:
+    get:
+      operationId: api_services_base_services_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this base service.
+        required: true
+      tags:
+      - Base Service
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseService'
+          description: ''
+    put:
+      operationId: api_services_base_services_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this base service.
+        required: true
+      tags:
+      - Base Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BaseService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BaseService'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseService'
+          description: ''
+    patch:
+      operationId: api_services_base_services_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this base service.
+        required: true
+      tags:
+      - Base Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBaseService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBaseService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBaseService'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseService'
+          description: ''
+    delete:
+      operationId: api_services_base_services_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this base service.
+        required: true
+      tags:
+      - Base Service
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '204':
+          description: No response body
+  /api/services/provider-services/:
+    get:
+      operationId: api_services_provider_services_list
+      tags:
+      - Provider Service
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProviderService'
+          description: ''
+    post:
+      operationId: api_services_provider_services_create
+      tags:
+      - Provider Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderService'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderService'
+          description: ''
+  /api/services/provider-services/{id}/:
+    get:
+      operationId: api_services_provider_services_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this provider service.
+        required: true
+      tags:
+      - Provider Service
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderService'
+          description: ''
+    put:
+      operationId: api_services_provider_services_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this provider service.
+        required: true
+      tags:
+      - Provider Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderService'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderService'
+          description: ''
+    patch:
+      operationId: api_services_provider_services_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this provider service.
+        required: true
+      tags:
+      - Provider Service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderService'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderService'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderService'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderService'
+          description: ''
+    delete:
+      operationId: api_services_provider_services_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this provider service.
+        required: true
+      tags:
+      - Provider Service
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/change-password/:
+    post:
+      operationId: api_users_change_password_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+  /api/users/check-profile/{id}/:
+    get:
+      operationId: api_users_check_profile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          description: No response body
+  /api/users/customer/profile/:
+    get:
+      operationId: api_users_customer_profile_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+          description: ''
+    post:
+      operationId: api_users_customer_profile_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+          description: ''
+    patch:
+      operationId: api_users_customer_profile_partial_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerProfile'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+          description: ''
+  /api/users/customer/profile/{id}/:
+    get:
+      operationId: api_users_customer_profile_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+          description: ''
+  /api/users/customer/register/:
+    post:
+      operationId: api_users_customer_register_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRegistration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerRegistration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerRegistration'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerRegistration'
+          description: ''
+  /api/users/login/:
+    post:
+      operationId: api_users_login_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /api/users/logout/:
+    post:
+      operationId: api_users_logout_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          description: No response body
+  /api/users/provider/profile/:
+    get:
+      operationId: api_users_provider_profile_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfile'
+          description: ''
+    post:
+      operationId: api_users_provider_profile_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfile'
+          description: ''
+    patch:
+      operationId: api_users_provider_profile_partial_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProviderProfile'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfile'
+          description: ''
+  /api/users/provider/profile/{id}/:
+    get:
+      operationId: api_users_provider_profile_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderProfile'
+          description: ''
+  /api/users/provider/register/:
+    post:
+      operationId: api_users_provider_register_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderRegistration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProviderRegistration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProviderRegistration'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderRegistration'
+          description: ''
+components:
+  schemas:
+    BaseService:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 220
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - id
+      - name
+      - updated_at
+    ChangePassword:
+      type: object
+      properties:
+        current_password:
+          type: string
+          writeOnly: true
+        new_password:
+          type: string
+          writeOnly: true
+        confirm_password:
+          type: string
+          writeOnly: true
+      required:
+      - confirm_password
+      - current_password
+      - new_password
+    CustomerProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          pattern: (?:jpg|jpeg|png)$
+        first_name:
+          type: string
+          maxLength: 200
+        middle_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        last_name:
+          type: string
+          maxLength: 200
+        address:
+          type: string
+      required:
+      - address
+      - first_name
+      - id
+      - image
+      - last_name
+    CustomerRegistration:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+      - password2
+      - username
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    PatchedBaseService:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 220
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCustomerProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          pattern: (?:jpg|jpeg|png)$
+        first_name:
+          type: string
+          maxLength: 200
+        middle_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        last_name:
+          type: string
+          maxLength: 200
+        address:
+          type: string
+    PatchedProviderProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 200
+        middle_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        last_name:
+          type: string
+          maxLength: 200
+        image:
+          type: string
+          format: uri
+          pattern: (?:jpg|jpeg|png)$
+        bio:
+          type: string
+          nullable: true
+        experience_years:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        address:
+          type: string
+        service_category:
+          type: string
+          maxLength: 100
+    PatchedProviderService:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        provider:
+          type: integer
+          readOnly: true
+        services:
+          allOf:
+          - $ref: '#/components/schemas/BaseService'
+          readOnly: true
+        base_service_id:
+          type: integer
+          writeOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    ProviderProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 200
+        middle_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        last_name:
+          type: string
+          maxLength: 200
+        image:
+          type: string
+          format: uri
+          pattern: (?:jpg|jpeg|png)$
+        bio:
+          type: string
+          nullable: true
+        experience_years:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        address:
+          type: string
+        service_category:
+          type: string
+          maxLength: 100
+      required:
+      - address
+      - first_name
+      - id
+      - image
+      - last_name
+      - service_category
+    ProviderRegistration:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+      - password2
+      - username
+    ProviderService:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        provider:
+          type: integer
+          readOnly: true
+        services:
+          allOf:
+          - $ref: '#/components/schemas/BaseService'
+          readOnly: true
+        base_service_id:
+          type: integer
+          writeOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - base_service_id
+      - created_at
+      - id
+      - price
+      - provider
+      - services
+      - updated_at
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
