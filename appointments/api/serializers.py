@@ -24,3 +24,12 @@ class CustomerGetAppointmentsSerializer(serializers.ModelSerializer):
         
         model = Appointments
         fields = ['id','provider','payment_method','status','extra_notes','appointment_date','booked_at']
+
+
+class ProviderAppointmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Appointments
+        fields = ['id','customer','payment_method','status','extra_notes','appointment_date','booked_at']
+    
