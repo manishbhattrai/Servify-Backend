@@ -72,16 +72,26 @@ class LoginView(APIView):
 
             user = authenticate(request, username = email, password=password)
 
+            user_data = {
+
+                    'username':user.username,
+                    'email': user.email,
+                    'role': user.role,
+                }
+
             if user is not None:
 
 
                 refresh = RefreshToken.for_user(user)
                 access_token = str(refresh.access_token)
 
+               
+
 
                 return Response({
 
                         'message':'Login sucessfull',
+                        'user_data':user_data,
                         'access_token': access_token,
                         'refresh_token': str(refresh)
                 }, status=status.HTTP_200_OK)
