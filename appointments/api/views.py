@@ -5,10 +5,11 @@ from django.shortcuts import get_object_or_404
 from .serializers import CreateAppointmentSerializer, CustomerGetAppointmentsSerializer, ProviderAppointmentSerializer
 from appointments.models import Appointments
 from .permissions import IsCustomerOnly
+from drf_spectacular.utils import extend_schema
 
 
 
-
+@extend_schema(tags=['Customer Create appointments'])
 class CreateAppointmentView(generics.CreateAPIView):
 
     queryset = Appointments.objects.all()
@@ -20,6 +21,7 @@ class CreateAppointmentView(generics.CreateAPIView):
         
         return serializer.save(customer = self.request.user)
 
+@extend_schema(tags=['Customer get and update appointments'])
 class CustomerGetUpdateappointmentView(APIView):
 
     serializer_class = CustomerGetAppointmentsSerializer
@@ -61,6 +63,8 @@ class CustomerGetUpdateappointmentView(APIView):
 
         return Response({"message":"Appointment cancelled sucessfully."},status=status.HTTP_200_OK)
 
+
+@extend_schema(tags=['Provider get and update appointments'])
 class ProviderAppointmentView(APIView):
 
     serializer_class = ProviderAppointmentSerializer
