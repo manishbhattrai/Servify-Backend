@@ -17,7 +17,7 @@ class CreateAppointmentView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         
-        return serializer(customer = self.request.user)
+        return serializer.save(customer = self.request.user)
 
 class CustomerGetUpdateappointmentView(APIView):
 

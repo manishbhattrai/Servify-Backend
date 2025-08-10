@@ -26,7 +26,7 @@ class Appointments(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointment_received')
     status = models.CharField(max_length=20,choices=STATUS_CHOICES, default='pending')
     payment_method = models.CharField(max_length=20,choices=PAYMENT_CHOICES, default='cash')
-    extra_notes = models.TextField(null=True)
+    extra_notes = models.TextField(null=True, blank=True)
     appointment_date = models.DateTimeField()
     booked_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True)
