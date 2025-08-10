@@ -42,20 +42,20 @@ class CustomerGetUpdateappointmentView(APIView):
 
         new_status = request.data.get('status')
 
+        if not new_status:
+            return Response({"message":"status is required."},status=status.HTTP_400_BAD_REQUEST)
+        
+        if appointments.status != 'pending':
+            return Response({"message":"only pending appointments can be cancelled."},
+                            status=status.HTTP_400_BAD_REQUEST
+                            )
+
         if new_status != 'cancelled':
             return Response({"message":"customer has only permission to cancel the appointments."},
                             status=status.HTTP_400_BAD_REQUEST
                             )
         
-        if new_status != 'pending':
-            return Response({"message":"only pending appointments can be cancelled."},
-                            status=status.HTTP_400_BAD_REQUEST
-                            )
-        
-        if not new_status:
-            return Response({"message":"status is required."},status=status.HTTP_400_BAD_REQUEST)
-        
-        appointments.status = new_status
+        appointments.status = 'cancelled'
         appointments.save()
 
         return Response({"message":"Appointment cancelled sucessfully."},status=status.HTTP_200_OK)
