@@ -89,7 +89,7 @@ class ProviderServiceTest(APITestCase):
         print(response.data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['services']['name'], "plumber")
+        self.assertEqual(response.data['services']['name'], "plumber") 
     
     def test_customer_cannot_create_provider_service(self):
 
@@ -169,6 +169,17 @@ class ProviderServiceTest(APITestCase):
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_customer_can_view_provider_services(self):
+
+        self.authenticate(self.customer_user)
+
+        url = reverse('service-list', kwargs={'provider_id': self.provider_user_2.id})
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
 
 class BaseServiceTest(APITestCase):
 
