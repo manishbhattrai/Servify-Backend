@@ -72,14 +72,15 @@ class LoginView(APIView):
 
             user = authenticate(request, username = email, password=password)
 
-            user_data = {
+
+            if user is not None:
+
+                user_data = {
 
                     'username':user.username,
                     'email': user.email,
                     'role': user.role,
                 }
-
-            if user is not None:
 
 
                 refresh = RefreshToken.for_user(user)
