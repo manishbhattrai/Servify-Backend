@@ -125,7 +125,7 @@ class CustomerProfileView(APIView):
 
     def patch(self,request):
 
-        user = request.user
+        user = self.request.user
         profile = get_object_or_404(CustomerProfile, user=user)
 
         data = request.data
@@ -139,7 +139,7 @@ class CustomerProfileView(APIView):
     
     def get(self,request):
 
-        user = request.user
+        user = self.request.user
         profile = get_object_or_404(CustomerProfile, user=user)
         serializer = self.serializer_class(profile)
 
@@ -196,7 +196,7 @@ class ProviderProfileView(APIView):
     
     def get(self, request):
 
-        user = request.user
+        user = self.request.user
         profile = get_object_or_404(ProviderProfile, user=user)
         
         serializer = self.serializer_class(profile)
@@ -209,11 +209,16 @@ class ProviderPublicProfileView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProviderProfileSerializer
 
-    def get(self,request, id):
+    def get(self,request, id=None):
 
-        profile = get_object_or_404(ProviderProfile, id=id)
-        serializer = self.serializer_class(profile)
 
+        if id:
+            profile = get_object_or_404(ProviderProfile, id=id)
+            serializer = self.serializer_class(profile)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        
+        profile = ProviderProfile.objects.all()
+        serializer = self.serializer_class(profile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @extend_schema(request=None, responses=None, tags=['Get Customer Profile'])
@@ -248,7 +253,7 @@ class ChangePasswordView(APIView):
 
     def post(self, request):
 
-        user = request.user
+        user = self.request.user
 
         data = request.data
         serializer = self.serializer_class(data=data)
