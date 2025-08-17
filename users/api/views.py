@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework.generics import CreateAPIView
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import get_user_model
@@ -18,6 +19,7 @@ from .serializers import ( CustomerRegistrationSerializer, ProviderRegistrationS
 
 from users.models import ProviderProfile, CustomerProfile
 from .permissions import IsOwnerorUser
+
 
 
 User = get_user_model()
@@ -91,10 +93,10 @@ class LoginView(APIView):
 
                 return Response({
 
-                        'message':'Login sucessfull',
-                        'user_data':user_data,
                         'access_token': access_token,
-                        'refresh_token': str(refresh)
+                        'refresh': str(refresh),
+                        'user_data':user_data,
+                        
                 }, status=status.HTTP_200_OK)
             
         else:
@@ -104,24 +106,20 @@ class LoginView(APIView):
         
         return Response({"message":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
 
+class CreateProfileView(CreateAPIView):
+
+    serializer_class = [CustomerProfileSerializer]
+    permission_classes =[IsAuthenticated]
+
+    def get_serializer_context(self):
+        return {'request':self.request}
+
 @extend_schema(tags=['Customer Profile'])
 class CustomerProfileView(APIView):
 
 
     permission_classes = [IsAuthenticated, IsOwnerorUser]
     serializer_class = CustomerProfileSerializer
-
-    def post(self,request):
-
-        data = request.data
-        serializer = self.serializer_class(data=data, context = {'request': request})
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
     def patch(self,request):
 
@@ -222,7 +220,7 @@ class ProviderPublicProfileView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @extend_schema(request=None, responses=None, tags=['Get Customer Profile'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 @api_view(['GET'])
 def get_profile(request):
 
@@ -230,14 +228,14 @@ def get_profile(request):
 
     if user.role == 'c':
 
-        customer_profile = CustomerProfile.objects.get(user=user)
+        customer_profile,created = CustomerProfile.objects.get_or_create(user=user)
 
         if customer_profile and not customer_profile.is_profile_complete:
             return Response({"message":"Incomplete profile.", "needs_profile_update": True}, status=status.HTTP_200_OK)
     
     elif user.role == 'p':
 
-        provider_profile = ProviderProfile.objects.get(user=user)
+        provider_profile,created = ProviderProfile.objects.get_or_create(user=user)
 
         if provider_profile and not provider_profile.is_profile_complete:
             return Response({"message":"Incomplete profile.", "needs_profile_update": True}, status=status.HTTP_200_OK)
