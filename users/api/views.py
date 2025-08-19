@@ -108,8 +108,18 @@ class LoginView(APIView):
 
 class CreateProfileView(CreateAPIView):
 
-    serializer_class = [CustomerProfileSerializer]
     permission_classes =[IsAuthenticated]
+
+    def get_serializer_class(self):
+        
+        user = self.request.user
+        
+        if user.role == 'c':
+            return CustomerProfileSerializer
+        
+        else:
+            return ProviderProfileSerializer
+        
 
     def get_serializer_context(self):
         return {'request':self.request}
@@ -158,22 +168,12 @@ class PublicCustomerProfileView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @extend_schema(tags=['Provider Profile'])
 class ProviderProfileView(APIView):
 
     permission_classes = [IsAuthenticated, IsOwnerorUser]
     serializer_class = ProviderProfileSerializer 
-
-    def post(self, request):
-
-        data = request.data
-        serializer = self.serializer_class(data=data, context = {'request': request})
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
     def patch(self,request):
