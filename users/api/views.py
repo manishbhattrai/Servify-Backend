@@ -106,6 +106,7 @@ class LoginView(APIView):
         
         return Response({"message":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(tags=['create profile'])
 class CreateProfileView(CreateAPIView):
 
     permission_classes =[IsAuthenticated]
