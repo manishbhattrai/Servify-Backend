@@ -119,6 +119,23 @@ class CreateProfileView(CreateAPIView):
     def get_serializer_context(self):
         return {'request':self.request}
     
+    def post(self, request, *args, **kwargs):
+        
+        try:
+            profile = CustomerProfile.objects.get(user=request.user)
+            if not profile.is_profile_complete:
+
+                serializer = self.get_serializer(profile, data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail":"profile already complete"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except CustomerProfile.DoesNotExist:
+
+            return super().post(request, *args, **kwargs)
+    
 
 class CreateProviderProfileView(CreateAPIView):
 
@@ -128,6 +145,23 @@ class CreateProviderProfileView(CreateAPIView):
     def get_serializer_context(self):
         return {'request':self.request}
     
+    def post(self, request, *args, **kwargs):
+        
+        try:
+            profile = ProviderProfile.objects.get(user=request.user)
+            if not profile.is_profile_complete:
+
+                serializer = self.get_serializer(profile, data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail":"profile already complete"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except ProviderProfile.DoesNotExist:
+
+            return super().post(request, *args, **kwargs)
+                
 
 @extend_schema(tags=['Customer Profile'])
 class CustomerProfileView(APIView):
@@ -152,9 +186,9 @@ class CustomerProfileView(APIView):
     
     def get(self,request):
 
-        user = self.request.user
-        profile = get_object_or_404(CustomerProfile, user=user)
-        serializer = self.serializer_class(profile)
+        
+        profile = CustomerProfile.objects.filter(is_profile_complete = True)
+        serializer = self.serializer_class(profile, many=True)
 
         return Response(
             serializer.data,
@@ -199,10 +233,8 @@ class ProviderProfileView(APIView):
     
     def get(self, request):
 
-        user = self.request.user
-        profile = get_object_or_404(ProviderProfile, user=user)
-        
-        serializer = self.serializer_class(profile)
+        profile = ProviderProfile.objects.filter(is_profile_complete = True)
+        serializer = self.serializer_class(profile, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -248,8 +280,11 @@ def get_profile(request):
         if provider_profile and not provider_profile.is_profile_complete:
             return Response({"message":"Incomplete profile.", "needs_profile_update": True}, status=status.HTTP_200_OK)
     
+        return Response({"message":"Profile complete.","needs_profile_update": False}, status=status.HTTP_200_OK)
+    
     else:
         return Response({"message":"Profile complete.","needs_profile_update": False}, status=status.HTTP_200_OK)
+
 
 @extend_schema(tags=['Change Password'])
 class ChangePasswordView(APIView):

@@ -55,6 +55,37 @@ class CustomerProfile(models.Model):
         return f"{self.user.username}'s profile."
     
 
+
+class skill(models.Model):
+
+    SKILL_CHOICES = [
+    ('Plumbing', 'Plumbing'),
+    ('Electrical Work', 'Electrical Work'),
+    ('Carpentry', 'Carpentry'),
+    ('Painting', 'Painting'),
+    ('Cleaning', 'Cleaning'),
+    ('Gardening', 'Gardening'),
+    ('AC Repair', 'AC Repair'),
+    ('Appliance Repair', 'Appliance Repair'),
+    ('Tutoring', 'Tutoring'),
+    ('Web Development', 'Web Development'),
+    ('Graphic Design', 'Graphic Design'),
+    ('Photography', 'Photography'),
+    ('Catering', 'Catering'),
+    ('Beauty Services', 'Beauty Services'),
+    ('Massage Therapy', 'Massage Therapy'),
+    ('Pet Care', 'Pet Care'),
+    ('House Sitting', 'House Sitting'),
+    ('Moving Services', 'Moving Services'),
+    ('Car Wash', 'Car Wash'),
+    ('Laundry Services', 'Laundry Services'),
+    ]
+
+    name = models.CharField(choices=SKILL_CHOICES, max_length=59)
+
+    def __str__(self):
+        return self.name
+    
 class ProviderProfile(models.Model):
 
     GENDER_CHOICES = [
@@ -64,6 +95,37 @@ class ProviderProfile(models.Model):
         ('o','Others'),
     ]
 
+    WORKING_HOUR_CHOICES = [
+    ('24/7 Availability', '24/7 Availability'),
+    ('Morning (6 AM - 12 PM)', 'Morning (6 AM - 12 PM)'),
+    ('Afternoon (12 PM - 6 PM)', 'Afternoon (12 PM - 6 PM)'),
+    ('Evening (6 PM - 10 PM)', 'Evening (6 PM - 10 PM)'),
+    ('Night (10 PM - 6 AM)', 'Night (10 PM - 6 AM)'),
+    ('Flexible Hours', 'Flexible Hours'),
+    ]
+
+    SERVICE_AREA_CHOICES = [
+    ('Kathmandu', 'Kathmandu'),
+    ('Lalitpur', 'Lalitpur'),
+    ('Bhaktapur', 'Bhaktapur'),
+    ('Birtamode', 'Birtamode'),
+    ('Bhadrapur', 'Bhadrapur'),
+    ('Biratnagar', 'Biratnagar'),
+    ('Pokhara', 'Pokhara'),
+    ('Nepalgunj', 'Nepalgunj'),
+    ('Butwal', 'Butwal'),
+    ('Hetauda', 'Hetauda'),
+    
+    ]
+
+    AVAILABILITY_CHOICES = [
+    ('Full Time', 'Full Time'),
+    ('Part Time', 'Part Time'),
+    ('Weekends Only', 'Weekends Only'),
+    ('Flexible', 'Flexible'),
+    ]
+
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to= 'provider/')
     ##first_name = models.CharField(max_length=200)
@@ -72,13 +134,15 @@ class ProviderProfile(models.Model):
     ##last_name = models.CharField(max_length=200)
     ##bio = models.TextField(null=True, blank=True)
     phone = models.CharField(max_length=15)
-    service_area = models.CharField(max_length=222)
+    service_area = models.CharField(max_length=50, choices=SERVICE_AREA_CHOICES)
     hourly_rate = models.DecimalField(decimal_places=2, max_digits=5)
     gender = models.CharField(choices=GENDER_CHOICES, default='m', max_length=12)
     experience_years = models.IntegerField(default=0)
     address = models.TextField()
     ##service_category = models.CharField(max_length=100)
-    availability = models.CharField(max_length=200, null=True, blank=True)
+    working_hours = models.CharField(max_length=50, choices= WORKING_HOUR_CHOICES, default='Flexible')
+    availability = models.CharField(max_length=50,choices=AVAILABILITY_CHOICES ,null=True, blank=True)
+    available_skills = models.ManyToManyField(skill)
     is_profile_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

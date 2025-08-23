@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import CustomerProfile, ProviderProfile
+from users.models import CustomerProfile, ProviderProfile,skill
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
 
@@ -239,11 +239,16 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 class ProviderProfileSerializer(serializers.ModelSerializer):
 
     image = serializers.ImageField( validators = [FileExtensionValidator (allowed_extensions= ['jpg','jpeg','png'])])
+    available_skills = serializers.SlugRelatedField(
+        many=True,
+        slug_field='name',
+        queryset=skill.objects.all()
+    )
 
     class Meta:
         model = ProviderProfile
-        fields = ['id','full_name','image','phone','service_area','hourly_rate','gender',
-                  'experience_years','address','availability']
+        fields = ['id','full_name','image','phone','service_area','hourly_rate','gender','available_skills',
+                  'working_hours','experience_years','address','availability']
         
         read_only_fields = ['user','created_at','updated_at']
         
@@ -253,7 +258,7 @@ class ProviderProfileSerializer(serializers.ModelSerializer):
         MAX_SIZE = 6*1024*1024
 
         if value.size > MAX_SIZE:
-            raise serializers.ValidationError("Image should be less than 50MB.")
+            raise serializers.ValidationError("Image should be less than 6MB.")
 
         return value
     
@@ -267,10 +272,18 @@ class ProviderProfileSerializer(serializers.ModelSerializer):
     
 
     def create(self, validated_data):
-
         user = self.context['request'].user
-        profile = ProviderProfile.objects.create(user=user, **validated_data, is_profile_complete = True)
-        
+
+        available_skills = validated_data.pop('available_skills', [])
+
+        profile = ProviderProfile.objects.create(
+            user=user,
+            is_profile_complete=True,
+            **validated_data
+        )
+
+        profile.available_skills.set(available_skills)
+
         return profile
     
     def update(self, instance, validated_data):
