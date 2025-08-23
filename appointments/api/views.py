@@ -38,26 +38,10 @@ class CustomerGetUpdateappointmentView(APIView):
     
     def patch(self,request,*agrs, **kwargs):
 
-        user = self.request.user
         id = self.kwargs.get('id')
 
-        appointments = get_object_or_404(Appointments, id=id ,customer = user)
-
-        new_status = request.data.get('status')
-
-        if not new_status:
-            return Response({"message":"status is required."},status=status.HTTP_400_BAD_REQUEST)
-        
-        if appointments.status != 'pending':
-            return Response({"message":"only pending appointments can be cancelled."},
-                            status=status.HTTP_400_BAD_REQUEST
-                            )
-
-        if new_status != 'cancelled':
-            return Response({"message":"customer has only permission to cancel the appointments."},
-                            status=status.HTTP_400_BAD_REQUEST
-                            )
-        
+        appointments = get_object_or_404(Appointments, id=id)
+                         
         appointments.status = 'cancelled'
         appointments.save()
 

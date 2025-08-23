@@ -1,29 +1,42 @@
 from rest_framework import serializers
 from appointments.models import Appointments
+from users.models import ProviderProfile
 
 
 class CreateAppointmentSerializer(serializers.ModelSerializer):
 
+    provider_id = serializers.IntegerField(write_only = True)
+    appointment_date = serializers.DateField()
+    time = serializers.TimeField()
 
     class Meta:
         model = Appointments
-        fields = ['provider','payment_method','extra_notes','appointment_date']
+        fields = ['provider_id','payment_method','extra_notes','time','appointment_date']
     
-    def validate_provider(self,value):
+    def validate_provider_id(self,value):
 
-        if value.role != 'p':
-            raise serializers.ValidationError("You cannot book an appointment without a provider.")
+        try:
+            provider = ProviderProfile.objects.get(id=value)
         
-        return value
+        except ProviderProfile.DoesNotExist:
+            raise serializers.ValidationError("Provider not found.")
+        
+        return provider
     
 
+    def create(self, validated_data):
+
+        provider = validated_data.pop('provider_id')
+        validated_data['provider'] = provider
+        return super().create(validated_data)
+        
 
 class CustomerGetAppointmentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         
         model = Appointments
-        fields = ['id','provider','payment_method','status','extra_notes','appointment_date','booked_at']
+        fields = ['id','provider','payment_method','status','time','extra_notes','appointment_date','booked_at']
 
 
 class ProviderAppointmentSerializer(serializers.ModelSerializer):
