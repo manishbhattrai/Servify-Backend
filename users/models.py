@@ -57,15 +57,28 @@ class CustomerProfile(models.Model):
 
 class ProviderProfile(models.Model):
 
+    GENDER_CHOICES = [
+
+        ('m','Male'),
+        ('f', 'Female'),
+        ('o','Others'),
+    ]
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to= 'provider/')
-    first_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200, null=True, blank=True)
-    last_name = models.CharField(max_length=200)
-    bio = models.TextField(null=True, blank=True)
+    ##first_name = models.CharField(max_length=200)
+    ##middle_name = models.CharField(max_length=200, null=True, blank=True)
+    full_name = models.CharField(max_length=220)
+    ##last_name = models.CharField(max_length=200)
+    ##bio = models.TextField(null=True, blank=True)
+    phone = models.CharField(max_length=15)
+    service_area = models.CharField(max_length=222)
+    hourly_rate = models.DecimalField(decimal_places=2, max_digits=5)
+    gender = models.CharField(choices=GENDER_CHOICES, default='m', max_length=12)
     experience_years = models.IntegerField(default=0)
     address = models.TextField()
-    service_category = models.CharField(max_length=100)
+    ##service_category = models.CharField(max_length=100)
+    availability = models.CharField(max_length=200, null=True, blank=True)
     is_profile_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

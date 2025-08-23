@@ -39,6 +39,8 @@ class UserRegistrationView(APIView):
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(tags=['Provider Registration'])
 class ProviderRegistrationView(APIView):
@@ -55,6 +57,8 @@ class ProviderRegistrationView(APIView):
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(tags=['Login'])
 class LoginView(APIView):
@@ -104,26 +108,26 @@ class LoginView(APIView):
                     "message":"Invalid Credentials."
                 }, status=status.HTTP_401_UNAUTHORIZED)
         
-        return Response({"message":serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(tags=['create profile'])
 class CreateProfileView(CreateAPIView):
 
     permission_classes =[IsAuthenticated]
-
-    def get_serializer_class(self):
-        
-        user = self.request.user
-        
-        if user.role == 'c':
-            return CustomerProfileSerializer
-        
-        else:
-            return ProviderProfileSerializer
-        
+    serializer_class = CustomerProfileSerializer
 
     def get_serializer_context(self):
         return {'request':self.request}
+    
+
+class CreateProviderProfileView(CreateAPIView):
+
+    permission_classes =[IsAuthenticated]
+    serializer_class = ProviderProfileSerializer
+
+    def get_serializer_context(self):
+        return {'request':self.request}
+    
 
 @extend_schema(tags=['Customer Profile'])
 class CustomerProfileView(APIView):
@@ -233,6 +237,9 @@ def get_profile(request):
 
         if customer_profile and not customer_profile.is_profile_complete:
             return Response({"message":"Incomplete profile.", "needs_profile_update": True}, status=status.HTTP_200_OK)
+        
+        return Response({"message":"profile complete", "needs_profile_update": False}, status=status.HTTP_200_OK)
+         
     
     elif user.role == 'p':
 

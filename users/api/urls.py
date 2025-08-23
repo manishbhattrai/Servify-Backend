@@ -3,7 +3,7 @@ from .views import (
 
                 ChangePasswordView, UserRegistrationView, ProviderProfileView,
                 ProviderRegistrationView, CreateProfileView,CustomerProfileView,LoginView,
-                LogoutView, get_profile, ProviderPublicProfileView,
+                LogoutView, get_profile, ProviderPublicProfileView,CreateProviderProfileView,
                 PublicCustomerProfileView
                     
                     )
@@ -15,7 +15,8 @@ urlpatterns = [
     path('provider/register/', ProviderRegistrationView.as_view(), name='provider-register'),
     path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('logout/', LogoutView.as_view(), name='user-logout'),
-    path('profile/create/', CreateProfileView.as_view(), name='create-profile'),
+    path('customer/profile/create/', CreateProfileView.as_view(), name='create-profile'),
+    path('provider/profile/create/', CreateProviderProfileView.as_view(), name='create-provider-profile'),
     path('customer/profile/', CustomerProfileView.as_view(), name='customer-profile'),
     path('customer/profile/<int:id>/', PublicCustomerProfileView.as_view(), name='customer-profile-get'),
     path('provider/profile/', ProviderProfileView.as_view(), name='provider-profile'),

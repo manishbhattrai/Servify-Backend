@@ -206,10 +206,10 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     
     def validate_image(self, value):
 
-        MAX_SIZE = 2*1024*1024
+        MAX_SIZE = 6*1024*1024
 
         if value.size > MAX_SIZE:
-            raise serializers.ValidationError("Image size should be less than 2MB.")
+            raise serializers.ValidationError("Image size should be less than 6MB.")
 
         return value
     
@@ -242,18 +242,18 @@ class ProviderProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProviderProfile
-        fields = ['id','first_name','middle_name','last_name','image',
-                  'bio','experience_years','address','service_category']
+        fields = ['id','full_name','image','phone','service_area','hourly_rate','gender',
+                  'experience_years','address','availability']
         
         read_only_fields = ['user','created_at','updated_at']
         
     
     def validate_image(self, value):
 
-        MAX_SIZE = 2*1024*1024
+        MAX_SIZE = 6*1024*1024
 
         if value.size > MAX_SIZE:
-            raise serializers.ValidationError("Image should be less than 2MB.")
+            raise serializers.ValidationError("Image should be less than 50MB.")
 
         return value
     
@@ -280,14 +280,15 @@ class ProviderProfileSerializer(serializers.ModelSerializer):
         if image:
             instance.image = image
 
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.middle_name = validated_data.get('middle_name', instance.middle_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.bio = validated_data.get('bio', instance.bio)
+        instance.full_name = validated_data.get('full_name', instance.full_name)
+        instance.phone = validated_data.get('phone', instance.phone)
+        instance.service_area = validated_data.get('service_area', instance.service_area)
+        instance.hourly_rate = validated_data.get('hourly_rate', instance.hourly_rate)
         instance.address = validated_data.get('address', instance.address)
         instance.experience_years = validated_data.get('experience_years', instance.experience_years)
-        instance.service_category = validated_data.get('service_category', instance.service_category)
-
+        instance.gender = validated_data.get('gender', instance.gender)
+        instance.availability = validated_data.get('availability', instance.availability)
+ 
         instance.save()
 
         return instance
