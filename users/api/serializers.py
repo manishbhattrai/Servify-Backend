@@ -2,6 +2,7 @@ from rest_framework import serializers
 from users.models import CustomerProfile, ProviderProfile,skill
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
+from .tasks import send_welcome_email
 
 User = get_user_model()
 
@@ -62,6 +63,7 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
 
+        send_welcome_email.delay(user.username, user.email)
 
         return user
         
@@ -119,6 +121,7 @@ class ProviderRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
 
+        send_welcome_email.delay(user.username, user.email)
 
         return user
 
