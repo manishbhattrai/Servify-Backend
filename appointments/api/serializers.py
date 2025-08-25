@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from appointments.models import Appointments
 from users.models import ProviderProfile
+from users.api.serializers import CustomerProfileSerializer
 
 
 class CreateAppointmentSerializer(serializers.ModelSerializer):
@@ -41,8 +42,9 @@ class CustomerGetAppointmentsSerializer(serializers.ModelSerializer):
 
 class ProviderAppointmentSerializer(serializers.ModelSerializer):
 
+    customer = CustomerProfileSerializer(read_only = True)
     class Meta:
 
         model = Appointments
-        fields = ['id','customer','payment_method','status','extra_notes','appointment_date','booked_at']
+        fields = ['id','customer','payment_method','status','time','extra_notes','appointment_date','booked_at']
     

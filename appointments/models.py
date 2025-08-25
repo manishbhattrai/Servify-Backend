@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from users.models import ProviderProfile
+from users.models import ProviderProfile, CustomerProfile
 
 # Create your models here.
 
@@ -23,7 +23,7 @@ class Appointments(models.Model):
         ('online', 'Online')
     ]
 
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointment_made')
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, related_name='appointment_made')
     provider = models.ForeignKey(ProviderProfile, on_delete=models.CASCADE, related_name='appointment_received')
     status = models.CharField(max_length=20,choices=STATUS_CHOICES, default='pending')
     time = models.TimeField()

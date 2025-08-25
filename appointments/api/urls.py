@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreateAppointmentView, CustomerGetUpdateappointmentView, ProviderAppointmentView
+from .views import CreateAppointmentView, CustomerGetUpdateappointmentView, ProviderAppointmentView, appointments_count
 
 
 urlpatterns = [
@@ -9,4 +9,6 @@ urlpatterns = [
     path('update/<int:id>/my-appointments/', CustomerGetUpdateappointmentView.as_view(), name='update-appointments'),
     path('provider/appointments/',ProviderAppointmentView.as_view(), name='provider-appointment-list'),
     path('provider/<int:id>/appointments/',ProviderAppointmentView.as_view(), name='provider-appointment-details'),
+    path('count/', appointments_count, name='total-appointments'),
+    
 ]
