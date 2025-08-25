@@ -200,9 +200,11 @@ class PublicCustomerProfileView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CustomerProfileSerializer
 
-    def get(self,request, id):
+    def get(self,request):
 
-        profile = get_object_or_404(CustomerProfile, id=id)
+        user = self.request.user
+
+        profile = get_object_or_404(CustomerProfile, user=user)
         serializer = self.serializer_class(profile)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -244,16 +246,11 @@ class ProviderPublicProfileView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProviderProfileSerializer
 
-    def get(self,request, id=None):
+    def get(self,request):
 
-
-        if id:
-            profile = get_object_or_404(ProviderProfile, id=id)
-            serializer = self.serializer_class(profile)
-            return Response(serializer.data,status=status.HTTP_200_OK)
-        
-        profile = ProviderProfile.objects.all()
-        serializer = self.serializer_class(profile, many=True)
+        user = self.request.user
+        profile = get_object_or_404(ProviderProfile, user=user)
+        serializer = self.serializer_class(profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @extend_schema(request=None, responses=None, tags=['Get Customer Profile'])

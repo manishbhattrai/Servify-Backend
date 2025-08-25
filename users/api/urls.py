@@ -18,8 +18,8 @@ urlpatterns = [
     path('customer/profile/create/', CreateProfileView.as_view(), name='create-profile'),
     path('provider/profile/create/', CreateProviderProfileView.as_view(), name='create-provider-profile'),
     path('customer/profile/', CustomerProfileView.as_view(), name='customer-profile'),
-    path('customer/profile/<int:id>/', PublicCustomerProfileView.as_view(), name='customer-profile-get'),
+    path('customer/my-profile/', PublicCustomerProfileView.as_view(), name='customer-profile-get'),
     path('provider/profile/', ProviderProfileView.as_view(), name='provider-profile'),
-    path('provider/profile/<int:id>/', ProviderPublicProfileView.as_view(), name='provider-profile-get'),
+    path('provider/my-profile/', ProviderPublicProfileView.as_view(), name='provider-profile-get'),
     path('check-profile/', get_profile, name='check-profile'),
 ]
