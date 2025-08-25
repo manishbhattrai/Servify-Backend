@@ -200,11 +200,20 @@ class ResetPasswordSerializer(serializers.Serializer):
 class CustomerProfileSerializer(serializers.ModelSerializer):
 
     image = serializers.ImageField(validators =[FileExtensionValidator(allowed_extensions=['jpg','jpeg','png'])])
+    full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomerProfile
-        fields = ['id','image','first_name','middle_name','last_name','address']
+        fields = ['id','image','first_name','middle_name','last_name','full_name','address']
         read_only_fields = ['user','created_at','updated_at']
+
+    
+    def get_full_name(self,obj):
+        
+        if obj.middle_name:
+            return f"{obj.first_name} {obj.middle_name} {obj.last_name}"
+        
+        return f"{obj.first_name} {obj.last_name}"
 
     
     def validate_image(self, value):
