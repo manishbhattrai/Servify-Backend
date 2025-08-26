@@ -117,7 +117,7 @@ class ProviderAppointmentView(APIView):
     
 from rest_framework.decorators import permission_classes, api_view
 
-
+@extend_schema(tags=['Appointments Count'])
 @permission_classes([IsProvider])
 @api_view(['GET'])
 def appointments_count(request):

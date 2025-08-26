@@ -136,7 +136,7 @@ class CreateProfileView(CreateAPIView):
 
             return super().post(request, *args, **kwargs)
     
-
+@extend_schema(tags=['Create Provider Profile'])
 class CreateProviderProfileView(CreateAPIView):
 
     permission_classes =[IsAuthenticated]
